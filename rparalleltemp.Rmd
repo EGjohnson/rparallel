@@ -1,0 +1,11 @@
+---
+title: "R template for parallel code on machine"
+output: html_notebook
+---
+
+
+
+```{r}
+plot(cars)
+```
+
