@@ -175,24 +175,25 @@ $(document).ready(function () {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGFwcGx5KDE6NSwgZnVuY3Rpb24oeCkgYyh4KzEwMCx4KzIwMCx4KzMwMCkpXG5gYGAifQ== -->
-<pre class="r"><code>lapply(1:5, function(x) c(x+100,x+200,x+300))</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYjwtMTAwXG5sYXBwbHkoMTozLCBmdW5jdGlvbih4KSBiK3gpXG5gYGAifQ== -->
+<pre class="r"><code>b&lt;-100
+lapply(1:3, function(x) b+x)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiW1sxXV1cblsxXSAxMDEgMjAxIDMwMVxuXG5bWzJdXVxuWzFdIDEwMiAyMDIgMzAyXG5cbltbM11dXG5bMV0gMTAzIDIwMyAzMDNcblxuW1s0XV1cblsxXSAxMDQgMjA0IDMwNFxuXG5bWzVdXVxuWzFdIDEwNSAyMDUgMzA1XG4ifQ== -->
+<!-- rnb-output-begin eyJkYXRhIjoiW1sxXV1cblsxXSAxMDFcblxuW1syXV1cblsxXSAxMDJcblxuW1szXV1cblsxXSAxMDNcbiJ9 -->
 <pre><code>[[1]]
-[1] 101 201 301
+[1] 101
 
 [[2]]
-[1] 102 202 302
+[1] 102
 
 [[3]]
-[1] 103 203 303
-
-[[4]]
-[1] 104 204 304
-
-[[5]]
-[1] 105 205 305</code></pre>
+[1] 103</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2FwcGx5KDE6MywgZnVuY3Rpb24oeCkgYit4KVxuYGBgIn0= -->
+<pre class="r"><code>sapply(1:3, function(x) b+x)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDEwMSAxMDIgMTAzXG4ifQ== -->
+<pre><code>[1] 101 102 103</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -210,8 +211,17 @@ number_cores &lt;- detectCores() - 2
 <div id="set-up-workers-fork" class="section level4">
 <h4>1.Set up Workers: Fork</h4>
 <p>I want to create the worker process by forking (makeForkCluster). Forking only works on Mac/Unix systems but is preffered to the default (makePSOCKcluster) which sets up a worker process which listens on a socket for expressions to evaluate.</p>
-<p>Forking is preferred because * include all your environmental variables (no manual export to cluster) * variables will keep the same addressess (saves memory)</p>
-<pre><code>my.cluster &lt;- makeCluster(number_cores,type=&quot;FORK&quot;)</code></pre>
+<p>Forking is preferred because: * all environmental variables are included (no manual export to cluster)</p>
+<ul>
+<li>variables will keep the same addressess (saves memory)</li>
+</ul>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXkuY2x1c3RlciA8LSBtYWtlQ2x1c3RlcihudW1iZXJfY29yZXMsdHlwZT1cIkZPUktcIilcbmBgYCJ9 -->
+<pre class="r"><code>my.cluster &lt;- makeCluster(number_cores,type=&quot;FORK&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 </div>
 <div id="apply-function-in-parallel-to-a-list-or-vector" class="section level2">
 <h2>2. Apply function in parallel to a list or vector</h2>
@@ -221,12 +231,28 @@ number_cores &lt;- detectCores() - 2
 </ul>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjbHVzdGVyIHdpbGwgb25seSBiZSBhYmxlIFxuYjwtMTAwXG4jIGNyZWF0ZSBhIGNsdXN0ZXIgdXNpbmcgNiBvZiBteSBjb21wdXRlciBjb3JlcyBGT1JLIGluIGVudmlyb25tZW50YWwgdmFyaWFibGVzXG5teS5jbHVzdGVyIDwtIG1ha2VDbHVzdGVyKG51bWJlcl9jb3Jlcyx0eXBlPVwiRk9SS1wiKVxuIyB1c2UgcGFycmFsZWwgdmVyc2lvbiBvZiBsYXBwbHkgKGxpc3QgdG8gbGlzdClcbm15Lmxpc3Q8LXBhckxhcHBseShteS5jbHVzdGVyLCAxOjUsZnVuY3Rpb24oeCkgeCtiKVxuI3VzZSBwYXJhbGxlbCB2ZXJzaW9uIG9mIHNhcHBseSAobGlzdCB0byBhcnJheSlcbm15LnZlY3RvcjwtcGFyU2FwcGx5KG15LmNsdXN0ZXIsMTo1LGZ1bmN0aW9uKHgpIHgrYilcbiMgc3RvcCBjbHVzdGVyIGFuZCByZWxlYXNlIHJlc291cmNlc1xuc3RvcENsdXN0ZXIobXkuY2x1c3RlcilcbnByaW50KFwibXkubGlzdFwiKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjbHVzdGVyIHdpbGwgb25seSBiZSBhYmxlIFxuYjwtMTAwXG4jIGNyZWF0ZSBhIGNsdXN0ZXIgdXNpbmcgNiBvZiBteSBjb21wdXRlciBjb3JlcyBGT1JLIGluIGVudmlyb25tZW50YWwgdmFyaWFibGVzXG5teS5jbHVzdGVyIDwtIG1ha2VDbHVzdGVyKG51bWJlcl9jb3Jlcyx0eXBlPVwiRk9SS1wiKVxuYGBgIn0= -->
 <pre class="r"><code># cluster will only be able 
 b&lt;-100
 # create a cluster using 6 of my computer cores FORK in environmental variables
-my.cluster &lt;- makeCluster(number_cores,type=&quot;FORK&quot;)
-# use parralel version of lapply (list to list)
+my.cluster &lt;- makeCluster(number_cores,type=&quot;FORK&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBpbiAuSW50ZXJuYWwoZXZhbChleHByLCBlbnZpciwgZW5jbG9zKSkgOlxuICBjbG9zaW5nIHVudXNlZCBjb25uZWN0aW9uIDggKDwtbG9jYWxob3N0OjExMzI0KVxuV2FybmluZyBpbiAuSW50ZXJuYWwoZXZhbChleHByLCBlbnZpciwgZW5jbG9zKSkgOlxuICBjbG9zaW5nIHVudXNlZCBjb25uZWN0aW9uIDcgKDwtbG9jYWxob3N0OjExMzI0KVxuV2FybmluZyBpbiAuSW50ZXJuYWwoZXZhbChleHByLCBlbnZpciwgZW5jbG9zKSkgOlxuICBjbG9zaW5nIHVudXNlZCBjb25uZWN0aW9uIDYgKDwtbG9jYWxob3N0OjExMzI0KVxuV2FybmluZyBpbiAuSW50ZXJuYWwoZXZhbChleHByLCBlbnZpciwgZW5jbG9zKSkgOlxuICBjbG9zaW5nIHVudXNlZCBjb25uZWN0aW9uIDUgKDwtbG9jYWxob3N0OjExMzI0KVxuV2FybmluZyBpbiAuSW50ZXJuYWwoZXZhbChleHByLCBlbnZpciwgZW5jbG9zKSkgOlxuICBjbG9zaW5nIHVudXNlZCBjb25uZWN0aW9uIDQgKDwtbG9jYWxob3N0OjExMzI0KVxuV2FybmluZyBpbiAuSW50ZXJuYWwoZXZhbChleHByLCBlbnZpciwgZW5jbG9zKSkgOlxuICBjbG9zaW5nIHVudXNlZCBjb25uZWN0aW9uIDMgKDwtbG9jYWxob3N0OjExMzI0KVxuIn0= -->
+<pre><code>Warning in .Internal(eval(expr, envir, enclos)) :
+  closing unused connection 8 (&lt;-localhost:11324)
+Warning in .Internal(eval(expr, envir, enclos)) :
+  closing unused connection 7 (&lt;-localhost:11324)
+Warning in .Internal(eval(expr, envir, enclos)) :
+  closing unused connection 6 (&lt;-localhost:11324)
+Warning in .Internal(eval(expr, envir, enclos)) :
+  closing unused connection 5 (&lt;-localhost:11324)
+Warning in .Internal(eval(expr, envir, enclos)) :
+  closing unused connection 4 (&lt;-localhost:11324)
+Warning in .Internal(eval(expr, envir, enclos)) :
+  closing unused connection 3 (&lt;-localhost:11324)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB1c2UgcGFycmFsZWwgdmVyc2lvbiBvZiBsYXBwbHkgKGxpc3QgdG8gbGlzdClcbm15Lmxpc3Q8LXBhckxhcHBseShteS5jbHVzdGVyLCAxOjUsZnVuY3Rpb24oeCkgeCtiKVxuI3VzZSBwYXJhbGxlbCB2ZXJzaW9uIG9mIHNhcHBseSAobGlzdCB0byBhcnJheSlcbm15LnZlY3RvcjwtcGFyU2FwcGx5KG15LmNsdXN0ZXIsMTo1LGZ1bmN0aW9uKHgpIHgrYilcbiMgc3RvcCBjbHVzdGVyIGFuZCByZWxlYXNlIHJlc291cmNlc1xuc3RvcENsdXN0ZXIobXkuY2x1c3RlcilcbnByaW50KFwibXkubGlzdFwiKVxuYGBgIn0= -->
+<pre class="r"><code># use parralel version of lapply (list to list)
 my.list&lt;-parLapply(my.cluster, 1:5,function(x) x+b)
 #use parallel version of sapply (list to array)
 my.vector&lt;-parSapply(my.cluster,1:5,function(x) x+b)
@@ -278,10 +304,11 @@ print(&quot;my.list&quot;)</code></pre>
 <p>The .combine argument allows us to define how we want to combine the results from each core.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShmb3JlYWNoKVxubGlicmFyeShTbWlzYylcbmxpYnJhcnkoZG9QYXJhbGxlbClcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShmb3JlYWNoKVxubGlicmFyeShTbWlzYylcbmxpYnJhcnkoZG9QYXJhbGxlbClcbmxpYnJhcnkoaXRlcmF0b3JzKVxuYGBgIn0= -->
 <pre class="r"><code>library(foreach)
 library(Smisc)
-library(doParallel)</code></pre>
+library(doParallel)
+library(iterators)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -306,44 +333,116 @@ foreach(i=1:4, j=4:8,k=9:12) %do% the.funct(i,j,k)</code></pre>
 [1] 88</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBtdWx0aXBsZSAuLi4gYXJndW1lbnRzXG50aGUuZnVuY3Q8LSBmdW5jdGlvbihpLGosayl7aStqKmt9XG50aW1lSXQoc2VxLm91dHB1dDwtZm9yZWFjaChpPTE6NCwgaj00Ojgsaz05OjEyLC5jb21iaW5lPWMpICVkbyUgdGhlLmZ1bmN0KGksaixrKSlcbmBgYCJ9 -->
+<pre class="r"><code># multiple ... arguments
+the.funct&lt;- function(i,j,k){i+j*k}
+timeIt(seq.output&lt;-foreach(i=1:4, j=4:8,k=9:12,.combine=c) %do% the.funct(i,j,k))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiMC4wMSBzZWNvbmRzIFxuIn0= -->
+<pre><code>0.01 seconds </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQoc2VxLm91dHB1dClcbmBgYCJ9 -->
+<pre class="r"><code>print(seq.output)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDM3IDUyIDY5IDg4XG4ifQ== -->
+<pre><code>[1] 37 52 69 88</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGltZUl0KGZvcmVhY2goaT0xOjEwMDAwMCoyMCwgaj0xOjEwMDAwMCo0MCxrPTE6MTAwMDAwLC5jb21iaW5lPWMpICVkbyUgdGhlLmZ1bmN0KGksaixrKSlcbmBgYCJ9 -->
 <pre class="r"><code>timeIt(foreach(i=1:100000*20, j=1:100000*40,k=1:100000,.combine=c) %do% the.funct(i,j,k))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiMzIuNzIgc2Vjb25kcyBcbiJ9 -->
-<pre><code>32.72 seconds </code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3NldCB1cCBjbHVzdGVyOiBvbmx5IGZvcmsgb24gbm9uLXdpbmRvd3Ncbm15LmNsdXN0ZXI8LW1ha2VDbHVzdGVyKG51bWJlcl9jb3Jlcyx0eXBlPVwiRk9SS1wiKVxuI3JlZ2lzdGVyIG15Y2x1c3RlciBmb3IgJWRvcGFyJVxucmVnaXN0ZXJEb1BhcmFsbGVsKG15LmNsdXN0ZXIpXG4jcnVuIGl0ZXJhdGlvbiBvdmVyIGNsdXN0ZXJzXG50aW1lSXQoZm9yZWFjaChpPTE6MTAwMDAwKjIwLCBqPTE6MTAwMDAwKjQwLGs9MToxMDAwMDAsLmNvbWJpbmUgPSBjKSAgJWRvcGFyJSAgdGhlLmZ1bmN0KGksaixrKSlcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3NldCB1cCBjbHVzdGVyOiBvbmx5IGZvcmsgb24gbm9uLXdpbmRvd3Ncbm15LmNsdXN0ZXI8LW1ha2VDbHVzdGVyKG51bWJlcl9jb3Jlcyx0eXBlPVwiRk9SS1wiKVxuI3JlZ2lzdGVyIG15Y2x1c3RlciBmb3IgJWRvcGFyJVxucmVnaXN0ZXJEb1BhcmFsbGVsKG15LmNsdXN0ZXIpXG4jcnVuIGl0ZXJhdGlvbiBvdmVyIGNsdXN0ZXJzXG50aW1lSXQocGFyLm91dHB1dDwtZm9yZWFjaChpPTE6NCxqPTQ6OCxrPTg6MTIsLmNvbWJpbmUgPSBjKSAgJWRvcGFyJSAgdGhlLmZ1bmN0KGksaixrKSlcbmBgYCJ9 -->
 <pre class="r"><code>#set up cluster: only fork on non-windows
 my.cluster&lt;-makeCluster(number_cores,type=&quot;FORK&quot;)
 #register mycluster for %dopar%
 registerDoParallel(my.cluster)
 #run iteration over clusters
-timeIt(foreach(i=1:100000*20, j=1:100000*40,k=1:100000,.combine = c)  %dopar%  the.funct(i,j,k))</code></pre>
+timeIt(par.output&lt;-foreach(i=1:4,j=4:8,k=8:12,.combine = c)  %dopar%  the.funct(i,j,k))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiNDIuNjMgc2Vjb25kcyBcbiJ9 -->
-<pre><code>42.63 seconds </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiMC4wMSBzZWNvbmRzIFxuIn0= -->
+<pre><code>0.01 seconds </code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzdG9wIGNsdXN0ZXIgYW5kIHJlbGVhc2UgcmVzb3VyY2VzXG5zdG9wQ2x1c3RlcihteS5jbHVzdGVyKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzdG9wIGNsdXN0ZXIgYW5kIHJlbGVhc2UgcmVzb3VyY2VzXG5zdG9wQ2x1c3RlcihteS5jbHVzdGVyKVxucHJpbnQocGFyLm91dHB1dClcbmBgYCJ9 -->
 <pre class="r"><code># stop cluster and release resources
-stopCluster(my.cluster)</code></pre>
+stopCluster(my.cluster)
+print(par.output)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDMzIDQ3IDYzIDgxXG4ifQ== -->
+<pre><code>[1] 33 47 63 81</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShmb3JlYWNoKVxuYGBgIn0= -->
+<pre class="r"><code>library(foreach)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiZm9yZWFjaDogc2ltcGxlLCBzY2FsYWJsZSBwYXJhbGxlbCBwcm9ncmFtbWluZyBmcm9tIFJldm9sdXRpb24gQW5hbHl0aWNzXG5Vc2UgUmV2b2x1dGlvbiBSIGZvciBzY2FsYWJpbGl0eSwgZmF1bHQgdG9sZXJhbmNlIGFuZCBtb3JlLlxuaHR0cDovL3d3dy5yZXZvbHV0aW9uYW5hbHl0aWNzLmNvbVxuIn0= -->
+<pre><code>foreach: simple, scalable parallel programming from Revolution Analytics
+Use Revolution R for scalability, fault tolerance and more.
+http://www.revolutionanalytics.com</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShwYXJhbGxlbClcbmxpYnJhcnkoU21pc2MpXG5saWJyYXJ5KGRvUGFyYWxsZWwpXG5gYGAifQ== -->
+<pre class="r"><code>library(parallel)
+library(Smisc)
+library(doParallel)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBpdGVyYXRvcnNcbiJ9 -->
+<pre><code>Loading required package: iterators</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShpdGVyYXRvcnMpXG5gYGAifQ== -->
+<pre class="r"><code>library(iterators)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Running jobs in parallel incurs overhead. Only if the jobs you fire at the worker nodes take a significant amount of time does parallelization improve overall performance. When the individual jobs take only milliseconds, the overhead of constantly firing off jobs will deteriorate overall performance. The trick is to divide the work over the nodes in such a way that the jobs are sufficiently long, say at least a few seconds. I used this to great effect running six Fortran models simultaneously, but these individual model runs took hours, almost negating the effect of overhead.</p>
-<p>Note that I haven’t run your example, but the situation I describe above is often the issue when parallization takes longer than running sequentially.</p>
-<p>On each of the worker nodes there is an R process, the overhead consists of sending instructions to each node telling them what to do, and gathering back the results</p>
-<p>construct a bit more demanding function</p>
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBtdWx0aXBsZSAuLi4gYXJndW1lbnRzXG5tYXgudmFsPC0xMF40XG50aGUuZnVuY3Q8LSBmdW5jdGlvbihpKXtzaW4oaSkrY29zKGkrcGkqaSkrdGFuKGkrMipwaSkqMTo1fVxudGltZUl0KHNlcS5vdXRwdXQ8LWZvcmVhY2goaT0xOm1heC52YWwsLmNvbWJpbmU9YykgJWRvJSB0aGUuZnVuY3QoaSkpXG5gYGAifQ== -->
+<pre class="r"><code># multiple ... arguments
+max.val&lt;-10^4
+the.funct&lt;- function(i){sin(i)+cos(i+pi*i)+tan(i+2*pi)*1:5}
+timeIt(seq.output&lt;-foreach(i=1:max.val,.combine=c) %do% the.funct(i))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiMy4wOCBzZWNvbmRzIFxuIn0= -->
+<pre><code>3.08 seconds </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0NhbGN1bGF0ZSB0aGUgbnVtYmVyIG9mIGNvcmVzIGFuZCBzdWJzdHJhY3QgMlxubnVtYmVyX2NvcmVzIDwtIGRldGVjdENvcmVzKCkgLSAyXG4jc2V0IHVwIGNsdXN0ZXI6IG9ubHkgZm9yayBvbiBub24td2luZG93c1xubXkuY2x1c3RlcjwtbWFrZUNsdXN0ZXIobnVtYmVyX2NvcmVzLHR5cGU9XCJGT1JLXCIpXG4jcmVnaXN0ZXIgbXljbHVzdGVyIGZvciAlZG9wYXIlXG5yZWdpc3RlckRvUGFyYWxsZWwobXkuY2x1c3RlcilcbnRoZS5mdW5jdDwtIGZ1bmN0aW9uKGkpe3NpbihpKStjb3MoaStwaSppKSt0YW4oaSsyKnBpKSoxOjV9XG50aW1lSXQocGFyLm91dHB1dDwtZm9yZWFjaChpPTE6bWF4LnZhbCwuY29tYmluZT1jKSAlZG9wYXIlIHRoZS5mdW5jdChpKSlcbmBgYCJ9 -->
+<pre class="r"><code>#Calculate the number of cores and substract 2
+number_cores &lt;- detectCores() - 2
+#set up cluster: only fork on non-windows
+my.cluster&lt;-makeCluster(number_cores,type=&quot;FORK&quot;)
+#register mycluster for %dopar%
+registerDoParallel(my.cluster)
+the.funct&lt;- function(i){sin(i)+cos(i+pi*i)+tan(i+2*pi)*1:5}
+timeIt(par.output&lt;-foreach(i=1:max.val,.combine=c) %dopar% the.funct(i))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiNC4wMyBzZWNvbmRzIFxuIn0= -->
+<pre><code>4.03 seconds </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzdG9wIGNsdXN0ZXIgYW5kIHJlbGVhc2UgcmVzb3VyY2VzXG5zdG9wQ2x1c3RlcihteS5jbHVzdGVyKVxucHJpbnQocGFyLm91dHB1dFszXSlcbmBgYCJ9 -->
+<pre class="r"><code># stop cluster and release resources
+stopCluster(my.cluster)
+print(par.output[3])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDQuOTczMzkyXG4ifQ== -->
+<pre><code>[1] 4.973392</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiB0ZW1wbGF0ZSBmb3IgcGFyYWxsZWwgY29kZSBvbiBtYWNoaW5lIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgoKCmBgYHtyfQpsYXBwbHkoMTo1LCBmdW5jdGlvbih4KSBjKHgrMTAwLHgrMjAwLHgrMzAwKSkKYGBgCgoKbWFrZUNsdXN0ZXIgZnJvbSB0aGUgcGFyYWxsZWwgcGFja2FnZS4gU2luY2UgSSBhbSBtYWtpbmcgYSBjbHVzdGVyIGxvY2FsbHkgb24gbXkgbWFjaGluZSBJIHdhbnQgdG8gbGVhdmUKc29tZSBjb3JlcyBmcmVlLCBzbyBJIHVzZSAyIGZld2VyIGNsdXN0ZXJzIHRoYW4gSSBoYXZlLiAgSSB3YW50IHRvIHVzZSB0aGUgdGhlIG9wdGlvbiBGT1JLIHdoZW4gSSBtYWtlIG15IGNsdXN0ZXIuIFRoaXMgb25seSB3b3JrcyBvbiBNYWMvVW5peCBzeXN0ZW1zIGJ1dCBpdCB3aWxsIGluY2x1ZGUgYWxsIHlvdXIgZW52aXJvbm1lbnRhbCB2YXJpYWJsZXMuCmBgYHtyfQpsaWJyYXJ5KHBhcmFsbGVsKQoKIyBDYWxjdWxhdGUgdGhlIG51bWJlciBvZiBjb3JlcyBhbmQgc3Vic3RyYWN0IDIKbnVtYmVyX2NvcmVzIDwtIGRldGVjdENvcmVzKCkgLSAyCiAKYGBgCgojIyMjIDEuU2V0IHVwIFdvcmtlcnM6IEZvcmsKSSB3YW50IHRvIGNyZWF0ZSB0aGUgd29ya2VyIHByb2Nlc3MgYnkgZm9ya2luZyAobWFrZUZvcmtDbHVzdGVyKS4gRm9ya2luZyBvbmx5IHdvcmtzIG9uIE1hYy9Vbml4IHN5c3RlbXMgYnV0IGlzIHByZWZmZXJlZCB0byB0aGUgZGVmYXVsdCAobWFrZVBTT0NLY2x1c3Rlcikgd2hpY2ggc2V0cyB1cCBhIHdvcmtlciBwcm9jZXNzIHdoaWNoIGxpc3RlbnMgb24gYSBzb2NrZXQgZm9yIGV4cHJlc3Npb25zIHRvIGV2YWx1YXRlLiAKCkZvcmtpbmcgaXMgcHJlZmVycmVkIGJlY2F1c2UKICAqIGluY2x1ZGUgYWxsIHlvdXIgZW52aXJvbm1lbnRhbCB2YXJpYWJsZXMgKG5vIG1hbnVhbCBleHBvcnQgdG8gY2x1c3RlcikKICAqIHZhcmlhYmxlcyB3aWxsIGtlZXAgdGhlIHNhbWUgYWRkcmVzc2VzcyAoc2F2ZXMgbWVtb3J5KQoKYGBge30KbXkuY2x1c3RlciA8LSBtYWtlQ2x1c3RlcihudW1iZXJfY29yZXMsdHlwZT0iRk9SSyIpCmBgYAoKIyMgMi4gQXBwbHkgZnVuY3Rpb24gaW4gcGFyYWxsZWwgdG8gYSBsaXN0IG9yIHZlY3RvcgoqIGxhcHBseSAtLT4gcGFyTGFwcGx5IChsaXN0IHRvIGxpc3QgKSAKKiBzYXBwbHkgLS0+IHBhclNhcHBseSAobGlzdCB0byBhcnJheSkKYGBge3J9CgojIGNsdXN0ZXIgd2lsbCBvbmx5IGJlIGFibGUgCmI8LTEwMAoKIyBjcmVhdGUgYSBjbHVzdGVyIHVzaW5nIDYgb2YgbXkgY29tcHV0ZXIgY29yZXMgRk9SSyBpbiBlbnZpcm9ubWVudGFsIHZhcmlhYmxlcwpteS5jbHVzdGVyIDwtIG1ha2VDbHVzdGVyKG51bWJlcl9jb3Jlcyx0eXBlPSJGT1JLIikKCiMgdXNlIHBhcnJhbGVsIHZlcnNpb24gb2YgbGFwcGx5IChsaXN0IHRvIGxpc3QpCm15Lmxpc3Q8LXBhckxhcHBseShteS5jbHVzdGVyLCAxOjUsZnVuY3Rpb24oeCkgeCtiKQoKI3VzZSBwYXJhbGxlbCB2ZXJzaW9uIG9mIHNhcHBseSAobGlzdCB0byBhcnJheSkKbXkudmVjdG9yPC1wYXJTYXBwbHkobXkuY2x1c3RlciwxOjUsZnVuY3Rpb24oeCkgeCtiKQoKIyBzdG9wIGNsdXN0ZXIgYW5kIHJlbGVhc2UgcmVzb3VyY2VzCnN0b3BDbHVzdGVyKG15LmNsdXN0ZXIpCgpwcmludCgibXkubGlzdCIpCnByaW50KG15Lmxpc3QpCnByaW50KCJteS52ZWN0b3IiKQpwcmludChteS52ZWN0b3IpCgpgYGAKIyMgcGFyYWxsZWwgbG9vcGluZyB3aXRoIGZvcmVhY2gKCmZvckVhY2gKKiBhZGRpdGlvbmFsbHkgbmVlZHM6IGxpYnJhcnkoZm9yZWFjaCksIGxpYnJhcnkoZG9QYXJhbGxlbCkKKiBMb29waW5nIGNvbnN0cnVjdCBmb3IgZXhlY3V0aW5nIFIgY29kZSByZXBlYXRlZGx5Ciogc3VwcG9ydHMgcGFyYWxsZWwgZXhlY3V0aW9uCiogTm90ZTogY2x1c3RlciBuZWVkcyB0byBiZSByZWdpc3RlcmVkIHdpdGggcmVnaXN0ZXJEb1BhcmFsbGVsCgp3b3JrcyBsaWtlIHRoZSBwYXJhbGxlbCB2ZXJzaW9uIG9mIHNhcHBseS4gVGhlIGRpZmZlcmVuY2UgaXMgZm9yZWFjaCBhbGxvd3MgdXMgdG8gY29tYmluZSBzYXBwbHkgdHlwZSBvdXRwdXQgaW4gYSBwYXJ0aWN1bGFyIHdheQoKVGhlIC5jb21iaW5lIGFyZ3VtZW50IGFsbG93cyB1cyB0byBkZWZpbmUgaG93IHdlIHdhbnQgdG8gY29tYmluZSB0aGUgcmVzdWx0cyBmcm9tIGVhY2ggY29yZS4KCmBgYHtyfQpsaWJyYXJ5KGZvcmVhY2gpCmxpYnJhcnkoU21pc2MpCmxpYnJhcnkoZG9QYXJhbGxlbCkKYGBgCgpgYGB7cn0KIyBtdWx0aXBsZSAuLi4gYXJndW1lbnRzCnRoZS5mdW5jdDwtIGZ1bmN0aW9uKGksaixrKXtpK2oqa30KZm9yZWFjaChpPTE6NCwgaj00Ojgsaz05OjEyKSAlZG8lIHRoZS5mdW5jdChpLGosaykKYGBgCgoKYGBge3J9CnRpbWVJdChmb3JlYWNoKGk9MToxMDAwMDAqMjAsIGo9MToxMDAwMDAqNDAsaz0xOjEwMDAwMCwuY29tYmluZT1jKSAlZG8lIHRoZS5mdW5jdChpLGosaykpCmBgYAoKCgpgYGB7cn0KI3NldCB1cCBjbHVzdGVyOiBvbmx5IGZvcmsgb24gbm9uLXdpbmRvd3MKbXkuY2x1c3RlcjwtbWFrZUNsdXN0ZXIobnVtYmVyX2NvcmVzLHR5cGU9IkZPUksiKQojcmVnaXN0ZXIgbXljbHVzdGVyIGZvciAlZG9wYXIlCnJlZ2lzdGVyRG9QYXJhbGxlbChteS5jbHVzdGVyKQojcnVuIGl0ZXJhdGlvbiBvdmVyIGNsdXN0ZXJzCnRpbWVJdChmb3JlYWNoKGk9MToxMDAwMDAqMjAsIGo9MToxMDAwMDAqNDAsaz0xOjEwMDAwMCwuY29tYmluZSA9IGMpICAlZG9wYXIlICB0aGUuZnVuY3QoaSxqLGspKQojIHN0b3AgY2x1c3RlciBhbmQgcmVsZWFzZSByZXNvdXJjZXMKc3RvcENsdXN0ZXIobXkuY2x1c3RlcikKYGBgCgoKClJ1bm5pbmcgam9icyBpbiBwYXJhbGxlbCBpbmN1cnMgb3ZlcmhlYWQuIE9ubHkgaWYgdGhlIGpvYnMgeW91IGZpcmUgYXQgdGhlIHdvcmtlciBub2RlcyB0YWtlIGEgc2lnbmlmaWNhbnQgYW1vdW50IG9mIHRpbWUgZG9lcyBwYXJhbGxlbGl6YXRpb24gaW1wcm92ZSBvdmVyYWxsIHBlcmZvcm1hbmNlLiBXaGVuIHRoZSBpbmRpdmlkdWFsIGpvYnMgdGFrZSBvbmx5IG1pbGxpc2Vjb25kcywgdGhlIG92ZXJoZWFkIG9mIGNvbnN0YW50bHkgZmlyaW5nIG9mZiBqb2JzIHdpbGwgZGV0ZXJpb3JhdGUgb3ZlcmFsbCBwZXJmb3JtYW5jZS4gVGhlIHRyaWNrIGlzIHRvIGRpdmlkZSB0aGUgd29yayBvdmVyIHRoZSBub2RlcyBpbiBzdWNoIGEgd2F5IHRoYXQgdGhlIGpvYnMgYXJlIHN1ZmZpY2llbnRseSBsb25nLCBzYXkgYXQgbGVhc3QgYSBmZXcgc2Vjb25kcy4gSSB1c2VkIHRoaXMgdG8gZ3JlYXQgZWZmZWN0IHJ1bm5pbmcgc2l4IEZvcnRyYW4gbW9kZWxzIHNpbXVsdGFuZW91c2x5LCBidXQgdGhlc2UgaW5kaXZpZHVhbCBtb2RlbCBydW5zIHRvb2sgaG91cnMsIGFsbW9zdCBuZWdhdGluZyB0aGUgZWZmZWN0IG9mIG92ZXJoZWFkLgoKTm90ZSB0aGF0IEkgaGF2ZW4ndCBydW4geW91ciBleGFtcGxlLCBidXQgdGhlIHNpdHVhdGlvbiBJIGRlc2NyaWJlIGFib3ZlIGlzIG9mdGVuIHRoZSBpc3N1ZSB3aGVuIHBhcmFsbGl6YXRpb24gdGFrZXMgbG9uZ2VyIHRoYW4gcnVubmluZyBzZXF1ZW50aWFsbHkuCgpPbiBlYWNoIG9mIHRoZSB3b3JrZXIgbm9kZXMgdGhlcmUgaXMgYW4gUiBwcm9jZXNzLCB0aGUgb3ZlcmhlYWQgY29uc2lzdHMgb2Ygc2VuZGluZyBpbnN0cnVjdGlvbnMgdG8gZWFjaCBub2RlIHRlbGxpbmcgdGhlbSB3aGF0IHRvIGRvLCBhbmQgZ2F0aGVyaW5nIGJhY2sgdGhlIHJlc3VsdHMKCmNvbnN0cnVjdCBhIGJpdCBtb3JlIGRlbWFuZGluZyBmdW5jdGlvbg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiB0ZW1wbGF0ZSBmb3IgcGFyYWxsZWwgY29kZSBvbiBtYWNoaW5lIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgoKCmBgYHtyfQpiPC0xMDAKbGFwcGx5KDE6MywgZnVuY3Rpb24oeCkgYit4KQpzYXBwbHkoMTozLCBmdW5jdGlvbih4KSBiK3gpCmBgYAoKCm1ha2VDbHVzdGVyIGZyb20gdGhlIHBhcmFsbGVsIHBhY2thZ2UuIFNpbmNlIEkgYW0gbWFraW5nIGEgY2x1c3RlciBsb2NhbGx5IG9uIG15IG1hY2hpbmUgSSB3YW50IHRvIGxlYXZlCnNvbWUgY29yZXMgZnJlZSwgc28gSSB1c2UgMiBmZXdlciBjbHVzdGVycyB0aGFuIEkgaGF2ZS4gIEkgd2FudCB0byB1c2UgdGhlIHRoZSBvcHRpb24gRk9SSyB3aGVuIEkgbWFrZSBteSBjbHVzdGVyLiBUaGlzIG9ubHkgd29ya3Mgb24gTWFjL1VuaXggc3lzdGVtcyBidXQgaXQgd2lsbCBpbmNsdWRlIGFsbCB5b3VyIGVudmlyb25tZW50YWwgdmFyaWFibGVzLgpgYGB7cn0KbGlicmFyeShwYXJhbGxlbCkKCiMgQ2FsY3VsYXRlIHRoZSBudW1iZXIgb2YgY29yZXMgYW5kIHN1YnN0cmFjdCAyCm51bWJlcl9jb3JlcyA8LSBkZXRlY3RDb3JlcygpIC0gMgogCmBgYAoKIyMjIyAxLlNldCB1cCBXb3JrZXJzOiBGb3JrCkkgd2FudCB0byBjcmVhdGUgdGhlIHdvcmtlciBwcm9jZXNzIGJ5IGZvcmtpbmcgKG1ha2VGb3JrQ2x1c3RlcikuIEZvcmtpbmcgb25seSB3b3JrcyBvbiBNYWMvVW5peCBzeXN0ZW1zIGJ1dCBpcyBwcmVmZmVyZWQgdG8gdGhlIGRlZmF1bHQgKG1ha2VQU09DS2NsdXN0ZXIpIHdoaWNoIHNldHMgdXAgYSB3b3JrZXIgcHJvY2VzcyB3aGljaCBsaXN0ZW5zIG9uIGEgc29ja2V0IGZvciBleHByZXNzaW9ucyB0byBldmFsdWF0ZS4gCgpGb3JraW5nIGlzIHByZWZlcnJlZCBiZWNhdXNlOgogICogYWxsIGVudmlyb25tZW50YWwgdmFyaWFibGVzIGFyZSBpbmNsdWRlZCAobm8gbWFudWFsIGV4cG9ydCB0byBjbHVzdGVyKQogIAogICogdmFyaWFibGVzIHdpbGwga2VlcCB0aGUgc2FtZSBhZGRyZXNzZXNzIChzYXZlcyBtZW1vcnkpCgpgYGB7cn0KbXkuY2x1c3RlciA8LSBtYWtlQ2x1c3RlcihudW1iZXJfY29yZXMsdHlwZT0iRk9SSyIpCmBgYAoKIyMgMi4gQXBwbHkgZnVuY3Rpb24gaW4gcGFyYWxsZWwgdG8gYSBsaXN0IG9yIHZlY3RvcgoqIGxhcHBseSAtLT4gcGFyTGFwcGx5IChsaXN0IHRvIGxpc3QgKSAKKiBzYXBwbHkgLS0+IHBhclNhcHBseSAobGlzdCB0byBhcnJheSkKYGBge3J9CgojIGNsdXN0ZXIgd2lsbCBvbmx5IGJlIGFibGUgCmI8LTEwMAoKIyBjcmVhdGUgYSBjbHVzdGVyIHVzaW5nIDYgb2YgbXkgY29tcHV0ZXIgY29yZXMgRk9SSyBpbiBlbnZpcm9ubWVudGFsIHZhcmlhYmxlcwpteS5jbHVzdGVyIDwtIG1ha2VDbHVzdGVyKG51bWJlcl9jb3Jlcyx0eXBlPSJGT1JLIikKCiMgdXNlIHBhcnJhbGVsIHZlcnNpb24gb2YgbGFwcGx5IChsaXN0IHRvIGxpc3QpCm15Lmxpc3Q8LXBhckxhcHBseShteS5jbHVzdGVyLCAxOjUsZnVuY3Rpb24oeCkgeCtiKQoKI3VzZSBwYXJhbGxlbCB2ZXJzaW9uIG9mIHNhcHBseSAobGlzdCB0byBhcnJheSkKbXkudmVjdG9yPC1wYXJTYXBwbHkobXkuY2x1c3RlciwxOjUsZnVuY3Rpb24oeCkgeCtiKQoKIyBzdG9wIGNsdXN0ZXIgYW5kIHJlbGVhc2UgcmVzb3VyY2VzCnN0b3BDbHVzdGVyKG15LmNsdXN0ZXIpCgpwcmludCgibXkubGlzdCIpCnByaW50KG15Lmxpc3QpCnByaW50KCJteS52ZWN0b3IiKQpwcmludChteS52ZWN0b3IpCgpgYGAKIyMgcGFyYWxsZWwgbG9vcGluZyB3aXRoIGZvcmVhY2gKCmZvckVhY2gKKiBhZGRpdGlvbmFsbHkgbmVlZHM6IGxpYnJhcnkoZm9yZWFjaCksIGxpYnJhcnkoZG9QYXJhbGxlbCkKKiBMb29waW5nIGNvbnN0cnVjdCBmb3IgZXhlY3V0aW5nIFIgY29kZSByZXBlYXRlZGx5Ciogc3VwcG9ydHMgcGFyYWxsZWwgZXhlY3V0aW9uCiogTm90ZTogY2x1c3RlciBuZWVkcyB0byBiZSByZWdpc3RlcmVkIHdpdGggcmVnaXN0ZXJEb1BhcmFsbGVsCgp3b3JrcyBsaWtlIHRoZSBwYXJhbGxlbCB2ZXJzaW9uIG9mIHNhcHBseS4gVGhlIGRpZmZlcmVuY2UgaXMgZm9yZWFjaCBhbGxvd3MgdXMgdG8gY29tYmluZSBzYXBwbHkgdHlwZSBvdXRwdXQgaW4gYSBwYXJ0aWN1bGFyIHdheQoKVGhlIC5jb21iaW5lIGFyZ3VtZW50IGFsbG93cyB1cyB0byBkZWZpbmUgaG93IHdlIHdhbnQgdG8gY29tYmluZSB0aGUgcmVzdWx0cyBmcm9tIGVhY2ggY29yZS4KCmBgYHtyfQpsaWJyYXJ5KGZvcmVhY2gpCmxpYnJhcnkoU21pc2MpCmxpYnJhcnkoZG9QYXJhbGxlbCkKbGlicmFyeShpdGVyYXRvcnMpCmBgYAoKYGBge3J9CiMgbXVsdGlwbGUgLi4uIGFyZ3VtZW50cwp0aGUuZnVuY3Q8LSBmdW5jdGlvbihpLGosayl7aStqKmt9CmZvcmVhY2goaT0xOjQsIGo9NDo4LGs9OToxMikgJWRvJSB0aGUuZnVuY3QoaSxqLGspCmBgYApgYGB7cn0KIyBtdWx0aXBsZSAuLi4gYXJndW1lbnRzCnRoZS5mdW5jdDwtIGZ1bmN0aW9uKGksaixrKXtpK2oqa30KdGltZUl0KHNlcS5vdXRwdXQ8LWZvcmVhY2goaT0xOjQsIGo9NDo4LGs9OToxMiwuY29tYmluZT1jKSAlZG8lIHRoZS5mdW5jdChpLGosaykpCnByaW50KHNlcS5vdXRwdXQpCmBgYAoKYGBge3J9CnRpbWVJdChmb3JlYWNoKGk9MToxMDAwMDAqMjAsIGo9MToxMDAwMDAqNDAsaz0xOjEwMDAwMCwuY29tYmluZT1jKSAlZG8lIHRoZS5mdW5jdChpLGosaykpCmBgYAoKCgpgYGB7cn0KI3NldCB1cCBjbHVzdGVyOiBvbmx5IGZvcmsgb24gbm9uLXdpbmRvd3MKbXkuY2x1c3RlcjwtbWFrZUNsdXN0ZXIobnVtYmVyX2NvcmVzLHR5cGU9IkZPUksiKQojcmVnaXN0ZXIgbXljbHVzdGVyIGZvciAlZG9wYXIlCnJlZ2lzdGVyRG9QYXJhbGxlbChteS5jbHVzdGVyKQojcnVuIGl0ZXJhdGlvbiBvdmVyIGNsdXN0ZXJzCnRpbWVJdChwYXIub3V0cHV0PC1mb3JlYWNoKGk9MTo0LGo9NDo4LGs9ODoxMiwuY29tYmluZSA9IGMpICAlZG9wYXIlICB0aGUuZnVuY3QoaSxqLGspKQojIHN0b3AgY2x1c3RlciBhbmQgcmVsZWFzZSByZXNvdXJjZXMKc3RvcENsdXN0ZXIobXkuY2x1c3RlcikKcHJpbnQocGFyLm91dHB1dCkKYGBgCgoKYGBge3J9CmxpYnJhcnkoZm9yZWFjaCkKbGlicmFyeShwYXJhbGxlbCkKbGlicmFyeShTbWlzYykKbGlicmFyeShkb1BhcmFsbGVsKQpsaWJyYXJ5KGl0ZXJhdG9ycykKYGBgCgpgYGB7cn0KIyBtdWx0aXBsZSAuLi4gYXJndW1lbnRzCm1heC52YWw8LTEwXjQKdGhlLmZ1bmN0PC0gZnVuY3Rpb24oaSl7c2luKGkpK2NvcyhpK3BpKmkpK3RhbihpKzIqcGkpKjE6NX0KdGltZUl0KHNlcS5vdXRwdXQ8LWZvcmVhY2goaT0xOm1heC52YWwsLmNvbWJpbmU9YykgJWRvJSB0aGUuZnVuY3QoaSkpCmBgYAoKCgpgYGB7cn0KI0NhbGN1bGF0ZSB0aGUgbnVtYmVyIG9mIGNvcmVzIGFuZCBzdWJzdHJhY3QgMgpudW1iZXJfY29yZXMgPC0gZGV0ZWN0Q29yZXMoKSAtIDIKI3NldCB1cCBjbHVzdGVyOiBvbmx5IGZvcmsgb24gbm9uLXdpbmRvd3MKbXkuY2x1c3RlcjwtbWFrZUNsdXN0ZXIobnVtYmVyX2NvcmVzLHR5cGU9IkZPUksiKQojcmVnaXN0ZXIgbXljbHVzdGVyIGZvciAlZG9wYXIlCnJlZ2lzdGVyRG9QYXJhbGxlbChteS5jbHVzdGVyKQp0aGUuZnVuY3Q8LSBmdW5jdGlvbihpKXtzaW4oaSkrY29zKGkrcGkqaSkrdGFuKGkrMipwaSkqMTo1fQp0aW1lSXQocGFyLm91dHB1dDwtZm9yZWFjaChpPTE6bWF4LnZhbCwuY29tYmluZT1jKSAlZG9wYXIlIHRoZS5mdW5jdChpKSkKIyBzdG9wIGNsdXN0ZXIgYW5kIHJlbGVhc2UgcmVzb3VyY2VzCnN0b3BDbHVzdGVyKG15LmNsdXN0ZXIpCnByaW50KHBhci5vdXRwdXRbM10pCmBgYA==</div>
 
 
 

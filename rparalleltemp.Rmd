@@ -6,7 +6,9 @@ output: html_notebook
 
 
 ```{r}
-lapply(1:5, function(x) c(x+100,x+200,x+300))
+b<-100
+lapply(1:3, function(x) b+x)
+sapply(1:3, function(x) b+x)
 ```
 
 
@@ -23,11 +25,12 @@ number_cores <- detectCores() - 2
 #### 1.Set up Workers: Fork
 I want to create the worker process by forking (makeForkCluster). Forking only works on Mac/Unix systems but is preffered to the default (makePSOCKcluster) which sets up a worker process which listens on a socket for expressions to evaluate. 
 
-Forking is preferred because
-  * include all your environmental variables (no manual export to cluster)
+Forking is preferred because:
+  * all environmental variables are included (no manual export to cluster)
+  
   * variables will keep the same addressess (saves memory)
 
-```{}
+```{r}
 my.cluster <- makeCluster(number_cores,type="FORK")
 ```
 
@@ -73,6 +76,7 @@ The .combine argument allows us to define how we want to combine the results fro
 library(foreach)
 library(Smisc)
 library(doParallel)
+library(iterators)
 ```
 
 ```{r}
@@ -80,7 +84,12 @@ library(doParallel)
 the.funct<- function(i,j,k){i+j*k}
 foreach(i=1:4, j=4:8,k=9:12) %do% the.funct(i,j,k)
 ```
-
+```{r}
+# multiple ... arguments
+the.funct<- function(i,j,k){i+j*k}
+timeIt(seq.output<-foreach(i=1:4, j=4:8,k=9:12,.combine=c) %do% the.funct(i,j,k))
+print(seq.output)
+```
 
 ```{r}
 timeIt(foreach(i=1:100000*20, j=1:100000*40,k=1:100000,.combine=c) %do% the.funct(i,j,k))
@@ -94,17 +103,40 @@ my.cluster<-makeCluster(number_cores,type="FORK")
 #register mycluster for %dopar%
 registerDoParallel(my.cluster)
 #run iteration over clusters
-timeIt(foreach(i=1:100000*20, j=1:100000*40,k=1:100000,.combine = c)  %dopar%  the.funct(i,j,k))
+timeIt(par.output<-foreach(i=1:4,j=4:8,k=8:12,.combine = c)  %dopar%  the.funct(i,j,k))
 # stop cluster and release resources
 stopCluster(my.cluster)
+print(par.output)
+```
+
+
+```{r}
+library(foreach)
+library(parallel)
+library(Smisc)
+library(doParallel)
+library(iterators)
+```
+
+```{r}
+# multiple ... arguments
+max.val<-10^4
+the.funct<- function(i){sin(i)+cos(i+pi*i)+tan(i+2*pi)*1:5}
+timeIt(seq.output<-foreach(i=1:max.val,.combine=c) %do% the.funct(i))
 ```
 
 
 
-Running jobs in parallel incurs overhead. Only if the jobs you fire at the worker nodes take a significant amount of time does parallelization improve overall performance. When the individual jobs take only milliseconds, the overhead of constantly firing off jobs will deteriorate overall performance. The trick is to divide the work over the nodes in such a way that the jobs are sufficiently long, say at least a few seconds. I used this to great effect running six Fortran models simultaneously, but these individual model runs took hours, almost negating the effect of overhead.
-
-Note that I haven't run your example, but the situation I describe above is often the issue when parallization takes longer than running sequentially.
-
-On each of the worker nodes there is an R process, the overhead consists of sending instructions to each node telling them what to do, and gathering back the results
-
-construct a bit more demanding function
+```{r}
+#Calculate the number of cores and substract 2
+number_cores <- detectCores() - 2
+#set up cluster: only fork on non-windows
+my.cluster<-makeCluster(number_cores,type="FORK")
+#register mycluster for %dopar%
+registerDoParallel(my.cluster)
+the.funct<- function(i){sin(i)+cos(i+pi*i)+tan(i+2*pi)*1:5}
+timeIt(par.output<-foreach(i=1:max.val,.combine=c) %dopar% the.funct(i))
+# stop cluster and release resources
+stopCluster(my.cluster)
+print(par.output[3])
+```
